@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AntConfiguration">
-    <defaultAnt bundledAnt="true" />
-  </component>
   <component name="Archetypes.Configuration">
     <option name="archetypesFileLocation" value="archetypes.xml" />
     <option name="workingDirectory" value="" />
@@ -63,7 +60,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="text2naf" target="1.5" />
+      <module name="text2naf" target="1.7" />
     </bytecodeTargetLevel>
   </component>
   <component name="CopyrightManager" default="" />
@@ -678,6 +675,30 @@
         <list size="0" />
       </value>
     </option>
+  </component>
+  <component name="libraryTable">
+    <library name="Maven: ant:ant:1.6.5">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/ant/ant/1.6.5/ant-1.6.5.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/ant/ant/1.6.5/ant-1.6.5-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/ant/ant/1.6.5/ant-1.6.5-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: com.github.cltl:KafSaxParser:v3.1.2">
+      <CLASSES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/cltl/KafSaxParser/v3.1.2/KafSaxParser-v3.1.2.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/cltl/KafSaxParser/v3.1.2/KafSaxParser-v3.1.2-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$MAVEN_REPOSITORY$/com/github/cltl/KafSaxParser/v3.1.2/KafSaxParser-v3.1.2-sources.jar!/" />
+      </SOURCES>
+    </library>
   </component>
   <component name="masterDetails">
     <states>
