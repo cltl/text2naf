@@ -3,8 +3,12 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$( cd $DIR && cd .. && pwd)"
 LIB="$ROOT"/target
+LIB="../target"
 
+echo $LIB
 
-java -cp "$LIB/naf2text-v1.0-jar-with-dependencies.jar" text2naf.createNafFromText --language en --url file1
+# call echo "This is a text" | ./text-stream-to-naf.sh
+
+java -cp "$LIB/text2naf-1.0-SNAPSHOT-jar-with-dependencies.jar" text2naf.createNafFromText --language en --url file1
 
 
