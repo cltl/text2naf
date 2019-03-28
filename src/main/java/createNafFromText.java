@@ -23,7 +23,7 @@ public class createNafFromText {
 
         String pathToTextFile = "";
         String date = "";
-        String url = "";
+        String uri = "";
         String language = "";
         if (args.length==0) {
             args = testparameters.split(" ");
@@ -39,16 +39,16 @@ public class createNafFromText {
             else if (arg.equalsIgnoreCase("--date") && args.length>(i+1)) {
                 date = args[i+1];
             }
-            else if (arg.equalsIgnoreCase("--url") && args.length>(i+1)) {
-                url = args[i+1];
+            else if (arg.equalsIgnoreCase("--uri") && args.length>(i+1)) {
+                uri = args[i+1];
             }
         }
 
 
 
 
-        if (url.isEmpty() ) {
-            System.err.println("No url provided. Aborting");
+        if (uri.isEmpty() ) {
+            System.err.println("No URI provided. Aborting");
         }
 
         if (language.isEmpty() ) {
@@ -58,20 +58,20 @@ public class createNafFromText {
         if (pathToTextFile.isEmpty()) {
             String text = getStringFromInputStream(System.in);
             if (date.isEmpty()) {
-                createNafStreamFromText(text, language, url);
+                createNafStreamFromText(text, language, uri);
             }
             else {
-                createNafStreamFromText(text, language, url, date);
+                createNafStreamFromText(text, language, uri, date);
             }
         }
 
         if (!pathToTextFile.isEmpty()) {
             File textFile = new File (pathToTextFile);
             if (date.isEmpty()) {
-                createNafFileFromTextFile(textFile, language, url);
+                createNafFileFromTextFile(textFile, language, uri);
             }
             else {
-                createNafFileFromTextFile(textFile, language, url, date);
+                createNafFileFromTextFile(textFile, language, uri, date);
             }
         }
 
@@ -79,18 +79,18 @@ public class createNafFromText {
 
       }
 
-      static void createNafStreamFromText (String contents, String language, String url) {
+      static void createNafStreamFromText (String contents, String language, String uri) {
           String date = createTimestamp();
-          createNafStreamFromText(contents, language, url, date);
+          createNafStreamFromText(contents, language, uri, date);
       }
 
-      static void createNafStreamFromText (String contents, String language, String url, String date) {
+      static void createNafStreamFromText (String contents, String language, String uri, String date) {
           String strBeginDate = eu.kyotoproject.util.DateUtil.createTimestamp();
           String strEndDate = null;
           KafSaxParser kafSaxParser = new KafSaxParser();
 
           kafSaxParser.getKafMetaData().setCreationtime(date);
-          kafSaxParser.getKafMetaData().setUrl(url);
+          kafSaxParser.getKafMetaData().setUrl(uri);
           kafSaxParser.getKafMetaData().setLanguage(language);
           kafSaxParser.rawText = contents;
 
@@ -107,12 +107,12 @@ public class createNafFromText {
       }
 
 
-      static void createNafFileFromTextFile (File txtFile, String language, String url) {
+      static void createNafFileFromTextFile (File txtFile, String language, String uri) {
           String date = createTimestamp();
-          createNafFileFromTextFile(txtFile, language, url, date);
+          createNafFileFromTextFile(txtFile, language, uri, date);
       }
 
-      static void createNafFileFromTextFile (File txtFile, String language, String url, String date) {
+      static void createNafFileFromTextFile (File txtFile, String language, String uri, String date) {
           String strBeginDate = eu.kyotoproject.util.DateUtil.createTimestamp();
           String strEndDate = null;
           KafSaxParser kafSaxParser = new KafSaxParser();
@@ -122,7 +122,7 @@ public class createNafFromText {
                 contents = new String(Files.readAllBytes(Paths.get(txtFile.getAbsolutePath())));
                 if (contents != null) {
                     kafSaxParser.getKafMetaData().setCreationtime(date);
-                    kafSaxParser.getKafMetaData().setUrl(url);
+                    kafSaxParser.getKafMetaData().setUrl(uri);
                     kafSaxParser.getKafMetaData().setLanguage(language);
                     kafSaxParser.rawText = contents;
 
