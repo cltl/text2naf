@@ -161,7 +161,7 @@ public class createNafFromText {
         return dateString;
     }
 
-    static public Calendar getCaledarObject (String dateString) {
+    static public Calendar getCalendarObject (String dateString) {
         Calendar calendarObj = Calendar.getInstance();
         SimpleDateFormat formatter
             = new SimpleDateFormat ("yyyy.MM.dd G 'at' HH:mm:ss a zzz");
