@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -17,10 +18,12 @@ public class createNafFromText {
     static final String version = "1.0";
     static final String nafversion = "3.0";
 
-    static String testparameters = "--text \"This is a text.\" --language en --url cltl.nl\file1";
+    //static String testparameters = "--text \"This is a text.\" --language en --url cltl.nl\file1";
+    static String testparameters = "--folder /Users/piek/Desktop/188_texts_to_rerun --extension .txt --language nl";
 
     static public void main (String[] args) {
-
+        String folder = "";
+        String extension = "";
         String pathToTextFile = "";
         String date = "";
         String uri = "";
@@ -32,6 +35,12 @@ public class createNafFromText {
             String arg = args[i];
             if (arg.equalsIgnoreCase("--textfile") && args.length>(i+1)) {
                 pathToTextFile = args[i+1];
+            }
+            else if (arg.equalsIgnoreCase("--folder") && args.length>(i+1)) {
+                folder = args[i+1];
+            }
+            else if (arg.equalsIgnoreCase("--extension") && args.length>(i+1)) {
+                extension = args[i+1];
             }
             else if (arg.equalsIgnoreCase("--language") && args.length>(i+1)) {
                 language = args[i+1];
@@ -47,7 +56,7 @@ public class createNafFromText {
 
 
 
-        if (uri.isEmpty() ) {
+        if (uri.isEmpty() && folder.isEmpty()) {
             System.err.println("No URI provided. Aborting");
         }
 
@@ -55,7 +64,7 @@ public class createNafFromText {
             System.err.println("No language provided. Aborting");
         }
 
-        if (pathToTextFile.isEmpty()) {
+        if (pathToTextFile.isEmpty() && folder.isEmpty()) {
             String text = getStringFromInputStream(System.in);
             if (date.isEmpty()) {
                 createNafStreamFromText(text, language, uri);
@@ -72,6 +81,15 @@ public class createNafFromText {
             }
             else {
                 createNafFileFromTextFile(textFile, language, uri, date);
+            }
+        }
+        if (!folder.isEmpty()) {
+            File folderFile = new File (folder);
+            if (date.isEmpty()) {
+                createNafFileForFolder(folderFile, extension, language);
+            }
+            else {
+                createNafFileForFolder(folderFile, extension, language, date);
             }
         }
 
@@ -93,7 +111,7 @@ public class createNafFromText {
           kafSaxParser.getKafMetaData().setUrl(uri);
           kafSaxParser.getKafMetaData().setLanguage(language);
           kafSaxParser.rawText = contents;
-
+          kafSaxParser.addCDATA();
           strEndDate = eu.kyotoproject.util.DateUtil.createTimestamp();
           String host = "";
           try {
@@ -125,6 +143,7 @@ public class createNafFromText {
                     kafSaxParser.getKafMetaData().setUrl(uri);
                     kafSaxParser.getKafMetaData().setLanguage(language);
                     kafSaxParser.rawText = contents;
+                    kafSaxParser.addCDATA();
 
                     strEndDate = eu.kyotoproject.util.DateUtil.createTimestamp();
                     String host = "";
@@ -212,5 +231,46 @@ public class createNafFromText {
     		return sb.toString();
 
     	}
+
+    static void createNafFileForFolder (File folder, String extension, String language, String date) {
+        ArrayList<File> files = makeRecursiveFileList(folder, extension);
+        for (int i = 0; i < files.size(); i++) {
+            File file = files.get(i);
+            createNafFileFromTextFile(file, language, file.getName(), date);
+        }
+    }
+    static void createNafFileForFolder (File folder, String extension, String language) {
+        ArrayList<File> files = makeRecursiveFileList(folder, extension);
+        for (int i = 0; i < files.size(); i++) {
+            File file = files.get(i);
+            createNafFileFromTextFile(file, language, file.getName());
+        }
+    }
+
+    static public ArrayList<File> makeRecursiveFileList(File inputFile, String theFilter) {
+             ArrayList<File> acceptedFileList = new ArrayList<File>();
+             File[] theFileList = null;
+             if ((inputFile.canRead())) {
+                 theFileList = inputFile.listFiles();
+                 for (int i = 0; i < theFileList.length; i++) {
+                     File newFile = theFileList[i];
+                     if (newFile.isDirectory()) {
+                         ArrayList<File> nextFileList = makeRecursiveFileList(newFile, theFilter);
+                         acceptedFileList.addAll(nextFileList);
+                     } else {
+                         if (newFile.getName().endsWith(theFilter)) {
+                             acceptedFileList.add(newFile);
+                         }
+                     }
+                 }
+             } else {
+                 System.out.println("Cannot access file:" + inputFile + "#");
+                 if (!inputFile.exists()) {
+                     System.out.println("File/folder does not exist!");
+                 }
+             }
+             return acceptedFileList;
+     }
+
 
 }
