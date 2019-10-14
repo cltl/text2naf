@@ -17,6 +17,7 @@ public class createNafFromText {
     static final String name = "vua-naf2text";
     static final String version = "1.0";
     static final String nafversion = "3.0";
+    static boolean CDATA = false;
 
     //static String testparameters = "--text \"This is a text.\" --language en --url cltl.nl\file1";
     static String testparameters = "--folder /Users/piek/Desktop/188_texts_to_rerun --extension .txt --language nl";
@@ -47,6 +48,9 @@ public class createNafFromText {
             }
             else if (arg.equalsIgnoreCase("--date") && args.length>(i+1)) {
                 date = args[i+1];
+            }
+            else if (arg.equalsIgnoreCase("--cdata")) {
+                CDATA = true;
             }
             else if (arg.equalsIgnoreCase("--uri") && args.length>(i+1)) {
                 uri = args[i+1];
@@ -111,7 +115,7 @@ public class createNafFromText {
           kafSaxParser.getKafMetaData().setUrl(uri);
           kafSaxParser.getKafMetaData().setLanguage(language);
           kafSaxParser.rawText = contents;
-          kafSaxParser.addCDATA();
+          if (CDATA) kafSaxParser.addCDATA();
           strEndDate = eu.kyotoproject.util.DateUtil.createTimestamp();
           String host = "";
           try {
@@ -143,7 +147,7 @@ public class createNafFromText {
                     kafSaxParser.getKafMetaData().setUrl(uri);
                     kafSaxParser.getKafMetaData().setLanguage(language);
                     kafSaxParser.rawText = contents;
-                    kafSaxParser.addCDATA();
+                    if (CDATA) kafSaxParser.addCDATA();
 
                     strEndDate = eu.kyotoproject.util.DateUtil.createTimestamp();
                     String host = "";
